@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Budget</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #app {
+            background: white;
+            padding: 25px;
+            width: 300px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #bal {
+            color: green;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            background: darkgreen;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        li {
+            background: #eee;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <h2>My Budget</h2>
+        <h1 id="bal">0</h1>
+
+        <input type="text" id="desc" placeholder="Item">
+        <input type="number" id="amt" placeholder="Amount">
+        <button onclick="add()">Add</button>
+
+        <ul id="list"></ul>
+    </div>
+
+    <script>
+        let total = 0;
+        const b = document.getElementById('bal');
+        const d = document.getElementById('desc');
+        const a = document.getElementById('amt');
+        const l = document.getElementById('list');
+
+        function add() {
+            let v = parseFloat(a.value);
+            let n = d.value;
+
+            if (n && v) {
+                total += v;
+                b.innerText = total;
+
+                
+                localStorage.setItem("item", n);
+                localStorage.setItem("amount", total);
+
+                const get_item = localStorage.getItem("item");
+                const get_amount = localStorage.getItem("amount");
+
+                let i = document.createElement('li');
+                i.innerText = get_item + ": " + get_amount;
+                l.appendChild(i);
+
+                console.log(get_item);
+
+                
+                d.value = '';
+                a.value = '';
+            }
+        }
+
+       
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log('Service Worker Registered'))
+                .catch(err => console.log('SW registration failed: ', err));
+        }
+    </script>
+
+</body>
+
+</html>
